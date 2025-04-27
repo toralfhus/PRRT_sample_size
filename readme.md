@@ -4,7 +4,7 @@ Using data from publications evaluating the dose-response between absorbed tumou
 after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.wikipedia.org/wiki/Peptide_receptor_radionuclide_therapy) of gastroenteropancreatic neuroendocrine tumours (GEP-NETs).
 
 10 publications were considered (not finished):
-1. x
+1. Hebert et al, 2024, JNM, https://doi.org/10.2967/jnumed.123.267023
 2. x
 3. x
 4. x
@@ -14,6 +14,9 @@ after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.w
 8. x
 9. x
 10. x
+
+Development of the method including some other considerations may be found in the dev-files, including the 
+jupyter notebook dev_sample_size_est_pub1.ipynb, using data extracted from pub 1 figure 3.
 
 
 ## Replication of data
