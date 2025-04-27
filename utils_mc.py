@@ -44,16 +44,17 @@ def compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save
     pass
 
 
-def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None):
+def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None, fit=True, desired_power=0.9):
     # Using bootstrapped datasets of variable size to evaluate the type II error rate (power) in a monte-carlo setting
+    # If logfit=True the power-samplesize relationship is fitted to the logarithmic function pw = log(n),
+    #   which may be used for extrapolating a coarse estimate for the needed population size to reach a power of interest
 
     df = pd.read_csv(path_load, index_col=0)
 
     p0 = df.iloc[0]
     df = df.drop(0)
-
-    print(df.shape)
-    print(p0.values)
+    print("ANALYZING bootstrapped results from ", nm, df.shape)
+    print("\tOriginal data:", p0.values)
 
     nvals = np.asarray(np.unique(df["n"].values), dtype=int)
     power_vals = []
@@ -65,18 +66,36 @@ def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None):
         print(n, dfn.shape, perc_sign)
         power_vals.append(perc_sign)
 
+    if fit:
+        a, b = np.polyfit(np.log(nvals), power_vals, deg=1)
+        print(f"\tFitted logarithmic function: y={a:.2f} log(x) + {b:.2f}")
+        fitfunc = lambda n: a * np.log(n) + b
+        n_req = int(np.ceil(np.exp((desired_power - b) / a)))
+        nvals_fit = list(range(min(nvals), n_req + 1))
+
     if plot:
         if len(plot) == 2:
             fig, ax = plot
         else:
             fig, ax = plt.subplots()
 
-        ax.plot(nvals, power_vals, "o")
+        ax.plot(nvals, power_vals, "o", label="Bootstrapped power")
+
+        if fit:
+            ax.plot(nvals_fit, fitfunc(nvals_fit), "--", label="Fitted log")
+
+            # Plot horizontal line at desired power
+            ax.axhline(y=desired_power, color='red', linestyle='--', label=f'Power = {desired_power}')
+
+            # Plot vertical line at required n
+            ax.axvline(x=n_req, color='green', linestyle='--', label=f'n ≈ {n_req}')
+
         p0 = {k: float(f"{v:.2g}") for k,v in p0.to_dict().items()}
         ax.set_title(f"{nm}\n{p0}")
         ax.grid()
         ax.set_xlabel("Sample size $n$")
         ax.set_ylabel("Power")
+        ax.legend()
 
     return p0, nvals, power_vals
 

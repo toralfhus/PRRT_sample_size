@@ -38,7 +38,7 @@ stat_names = ["r", "p"]  # statistical parameters to evaluate using param_func
 stat_sign = lambda p1, p2: p1 ** 2 >= .25 and p2 < .05
 
 
-fig, ax = plt.subplots(ncols=2, nrows=2, figsize=(10, 12))
+fig, ax = plt.subplots(ncols=2, nrows=2, figsize=(10, 14))
 ax = ax.ravel()
 
 # Iterate over the four figures
@@ -48,8 +48,8 @@ for i, dfi in enumerate(dfs):
     path_save = os.path.join(folder_data, f"boot_{nm}.csv")
 
     if do_calc:
-        compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save=path_save, n_min=3, n_rep=10000, nm=nm)
-    analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]))
+        compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save=path_save, n_min=3, n_rep=1000, nm=nm)
+    analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]), fit=True, desired_power=0.9)
 
 savefig_path = os.path.join(folder_figs, "power_boot.png")
 plt.savefig(savefig_path)

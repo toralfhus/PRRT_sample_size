@@ -25,6 +25,10 @@ data/pubX and loaded using functions in utils_load.py. Replicated figures along 
 - First a generator of extracted points from the four figures are loaded using the function **load_pub7(folder_data)** from [utils_load.py](utils_load.py)
 - Figure 6A is replicated using extracted points. 
 
+```python
+compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save=path_save, n_min=3, n_rep=1000, nm=nm)
+```
+
 <img src="./figures/pub7_jahn21/readme_data.png" alt="alt text" width="800"/>
 
 Note that the pearson correlation coefficient vary somewhat to the original (R2 of 0.33 versus 0.37), but the p-value is similar.
@@ -36,7 +40,29 @@ statistical significance under the reported success criteria (statistical power)
 
 Publication 7 uses a double criteria: both $R^2 \geq 0.25$ and p < .05
 <br>
+This criteria is specified in the _stat_sign_ function, and used as an input parameter in the function _analyze_bootstrapped_params_.
+
+```python
+stat_sign = lambda p1, p2: p1 ** 2 >= .25 and p2 < .05
+
+fig, ax = plt.subplots()
+analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]))
+
+```
+
 
 <img src="./figures/pub7_jahn21/readme_power.png" alt="alt text" width="300"/>
 
-Evaluating the figure, it seems to converge to a power about
+Evaluating the figure, it seems to converge to a power around 0.8 when approaching the original sample size (n=23), 
+suggesting this is a representative power of the study.
+
+## Extrapolation to higher population sizes
+Instead of over-sampling the original data, the power / sample-size relationship is modelled using a 
+logarithmic function. Thus enabling a coarse estimate of the required sample size to reach a desired power. 
+
+```python
+analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]), fit=True, desired_power=0.9)
+```
+
+
+<img src="./figures/pub7_jahn21/readme_power_fit.png" alt="alt text" width="300"/>
