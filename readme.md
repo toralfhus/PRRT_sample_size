@@ -16,7 +16,7 @@ after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.w
 10. x
 
 Development of the method including some other considerations may be found in the dev-files, including the 
-jupyter notebook dev_sample_size_est_pub1.ipynb, using data extracted from pub 1 figure 3.
+jupyter notebook [dev_sample_size_est_pub1.ipynb](dev_sample_size_est_pub1.ipynb), using data extracted from pub 1 figure 3.
 
 
 ## Replication of data
