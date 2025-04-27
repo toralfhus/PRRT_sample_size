@@ -1,7 +1,7 @@
 # Statistical power and sample size estimation
 
 Using data from publications evaluating the dose-response between absorbed tumour dose (AD) and radiological response 
-after 177Lu-Dotatate peptide-receptor radionuclide therapy (PRRT) of gastroenteropancreatic neuroendocrine tumours (GEP-NETs).
+after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.wikipedia.org/wiki/Peptide_receptor_radionuclide_therapy) of gastroenteropancreatic neuroendocrine tumours (GEP-NETs).
 
 10 publications were considered (not finished):
 1. x
