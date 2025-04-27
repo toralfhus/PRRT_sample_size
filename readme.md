@@ -1,4 +1,4 @@
-# Statistical power and sample size estimation using a monte carlo approach
+# Statistical power and sample size estimation using a bootstrap monte carlo approach
 
 Using data from publications evaluating the dose-response between absorbed tumour dose (AD) and radiological response 
 after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.wikipedia.org/wiki/Peptide_receptor_radionuclide_therapy) of gastroenteropancreatic neuroendocrine tumours (GEP-NETs).
