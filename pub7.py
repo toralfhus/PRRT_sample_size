@@ -31,7 +31,7 @@ dfs = load_pub7(folder_data)
 
 do_calc = False     # load if false
 
-# TODO: square r in analysis (r2)
+
 stat_func = pearsonr
 stat_names = ["r", "p"]  # statistical parameters to evaluate using param_func
 # stat_sign = [lambda p: p**2>0.25, lambda p: p<0.05]
