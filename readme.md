@@ -18,15 +18,16 @@ after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.w
 
 ## Replication of data
 The data were mined from figures, or simply collected from tables. Extracted data are found as .csv in the folder 
-data/pubX and loaded using functions in utils_load.py. 
+data/pubX and loaded using functions in utils_load.py. Replicated figures along results are found in the figures folders.
 
-Replicated figures along results are found in the figures folders.
+**Publication 7 as example**: Running the script [pub7.py](pub7.py)
 
-**Publication 7**: replication of figures 6 and 7 (A + B) using extracted points.
-Note that the pearson correlation coefficients vary somewhat to the original, some points were omitted,
-but the p-values are representative.
+- First a generator of extracted points from the four figures are loaded using the function **load_pub7(folder_data)** from [utils_load.py](utils_load.py)
+- Figure 6A is replicated using extracted points. 
 
 <img src="./figures/pub7_jahn21/readme_data.png" alt="alt text" width="800"/>
+
+Note that the pearson correlation coefficient vary somewhat to the original (R2 of 0.33 versus 0.37), but the p-value is similar.
 
 
 ## Repeated subsampling to evaluate power
@@ -37,3 +38,5 @@ Publication 7 uses a double criteria: both $R^2 \geq 0.25$ and p < .05
 <br>
 
 <img src="./figures/pub7_jahn21/readme_power.png" alt="alt text" width="300"/>
+
+Evaluating the figure, it seems to converge to a power about

@@ -75,6 +75,8 @@ def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None):
         p0 = {k: float(f"{v:.2g}") for k,v in p0.to_dict().items()}
         ax.set_title(f"{nm}\n{p0}")
         ax.grid()
+        ax.set_xlabel("Sample size $n$")
+        ax.set_ylabel("Power")
 
     return p0, nvals, power_vals
 
