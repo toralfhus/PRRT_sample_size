@@ -1,5 +1,28 @@
 from utils import *
 
+
+def load_pub5(folder):
+    # Ha et al, EJNMMI Physics, 2024 https://doi.org/10.1186/s40658-024-00620-8
+    print(f"\n--- Loading data from Figures 2/3 A/B/C from pub5: Ha et al, EJNMMI Physics, 2024 ---")
+    files = os.listdir(folder)
+    files = list(filter(lambda f: ".csv" in f and "Pub5" in f, files))
+    files = list(filter(lambda f: "boot" not in f, files))
+
+    files.sort()
+    print(files)
+    print()
+    for f in files:
+        print("\tLOADING", f, end=" ")
+        df = pd.read_csv(os.path.join(folder, f), index_col=None, encoding='unicode_escape')   # no pt indexing in csv
+        print(df.shape, df.columns.values)
+
+        nm = f.split(".")[0]    # remove .csv
+        yield df.T.iloc[0], df.T.iloc[1], nm
+
+    pass
+
+
+
 def load_pub7(folder):
     # Jahn et al, Cancers, 2021 https://doi.org/10.3390/cancers13050962
     # df with two columns: Accumulated absorbed dose until BR (Gy), Fractional shrinkage of diameter

@@ -2,7 +2,12 @@ from utils import *
 
 import warnings
 from scipy.stats import pearsonr, ConstantInputWarning
+from scipy.optimize import curve_fit
 from sklearn.utils import resample
+
+
+def weibull_cdf(x, lb, k):
+    return 1 - np.exp(-(x / lb) ** k)
 
 
 def compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save=None, n_min=3, n_rep=100, nm=None):
@@ -46,8 +51,10 @@ def compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save
 
 def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None, fit=True, desired_power=0.9):
     # Using bootstrapped datasets of variable size to evaluate the type II error rate (power) in a monte-carlo setting
-    # If logfit=True the power-samplesize relationship is fitted to the logarithmic function pw = log(n),
-    #   which may be used for extrapolating a coarse estimate for the needed population size to reach a power of interest
+    # If logfit=True the power-samplesize relationship is fitted to
+    # old: the logarithmic function pw = log(n)
+    # new: weibull CDF (can approach both log or sigmoid shapes)
+    # which may be used for extrapolating a coarse estimate for the needed population size to reach a power of interest
 
     df = pd.read_csv(path_load, index_col=0)
 
@@ -67,10 +74,17 @@ def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None, fit=Tr
         significance_rates.append(perc_sign)
 
     if fit:
-        a, b = np.polyfit(np.log(nvals), significance_rates, deg=1)
-        print(f"\tFitted logarithmic function: y={a:.2f} log(x) + {b:.2f}")
-        fitfunc = lambda n: a * np.log(n) + b
-        n_req = np.exp((desired_power - b) / a)
+        # a, b = np.polyfit(np.log(nvals), significance_rates, deg=1)
+        # print(f"\tFitted logarithmic function: y={a:.2f} log(x) + {b:.2f}")
+        # fitfunc = lambda n: a * np.log(n) + b
+        # n_req = np.exp((desired_power - b) / a)
+        init = [50, 2]
+        bounds = [[1e-3, 1e-3], [1e3, 10]]
+        (lb, k), _ = curve_fit(weibull_cdf, nvals, significance_rates, p0=init, bounds=bounds)
+        fitfunc = lambda x: weibull_cdf(x, lb, k)
+        print(f"\tFitted Weibull: lambda={lb}, k={k}")
+        n_req = lb * (-np.log(1 - desired_power)) ** (1/k)
+        print(n_req)
 
         if n_req < 1 or n_req > 1e4:
             print(f"\tbad estimate: n_req = {n_req:.3e} -> dropping log-fit")
@@ -78,7 +92,7 @@ def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None, fit=Tr
             nvals_fit = None
         else:
             n_req = int(np.ceil(n_req))
-            print(n_req)
+            print(f"\t-> N to reach pwr={desired_power} -> {n_req}")
             nvals_fit = list(range(min(nvals), n_req + 1))
 
     if plot:

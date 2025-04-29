@@ -8,7 +8,7 @@ after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.w
 2. x
 3. x
 4. x
-5. x
+5. Ha et al, 2024, EJNMMI, https://doi.org/10.1186/s40658-024-00620-8
 6. x
 7. Jahn et al, 2021, Cancers, https://doi.org/10.3390/cancers13050962
 8. x
@@ -60,8 +60,11 @@ Evaluating the figure, it seems to converge to a power around 0.8 when approachi
 suggesting this is a representative power of the study.
 
 ## Extrapolation to higher population sizes
-Instead of over-sampling the original data, the power / sample-size relationship is modelled using a 
-logarithmic function. Thus enabling a coarse estimate of the required sample size to reach a desired power. 
+Instead of over-sampling the original data, the power / sample-size relationship is modelled using the 
+[cumulative Weibull distribution](https://en.wikipedia.org/wiki/Weibull_distribution), which may approach both a 
+log-shaped (e.g. pub 7 fig 6A) or logistic curve (e.g. pub 3 fig 3A) depending on the parameters. 
+
+Thus enabling a coarse estimate of the required sample size to reach a desired power. 
 
 ```python
 analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]), fit=True, desired_power=0.9)
@@ -69,3 +72,5 @@ analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]), fit=
 
 
 <img src="./figures/pub7_jahn21/readme_power_fit.png" alt="alt text" width="300"/>
+
+<img src="./figures/pub5_ha24/power_3A.png" alt="alt text" width="400"/>
