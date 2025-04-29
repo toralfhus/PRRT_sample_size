@@ -12,7 +12,7 @@ after 177Lu-Dotatate [peptide-receptor radionuclide therapy (PRRT)](https://en.w
 6. x
 7. Jahn et al, 2021, Cancers, https://doi.org/10.3390/cancers13050962
 8. x
-9. x
+9. Jahn et al, 2020, Neuroendocrinology, https://doi.org/10.1159/000504001
 10. x
 
 Development of the method including some other considerations may be found in the dev-files, including the 

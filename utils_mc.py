@@ -57,21 +57,29 @@ def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None, fit=Tr
     print("\tOriginal data:", p0.values)
 
     nvals = np.asarray(np.unique(df["n"].values), dtype=int)
-    power_vals = []
+    significance_rates = []
 
     for n in nvals:
         dfn = df[df["n"] == n].drop("n", axis=1)
         # print(dfn)
         perc_sign = dfn.apply(lambda r: stat_sign(*r), axis=1).sum() / len(dfn)
         print(n, dfn.shape, perc_sign)
-        power_vals.append(perc_sign)
+        significance_rates.append(perc_sign)
 
     if fit:
-        a, b = np.polyfit(np.log(nvals), power_vals, deg=1)
+        a, b = np.polyfit(np.log(nvals), significance_rates, deg=1)
         print(f"\tFitted logarithmic function: y={a:.2f} log(x) + {b:.2f}")
         fitfunc = lambda n: a * np.log(n) + b
-        n_req = int(np.ceil(np.exp((desired_power - b) / a)))
-        nvals_fit = list(range(min(nvals), n_req + 1))
+        n_req = np.exp((desired_power - b) / a)
+
+        if n_req < 1 or n_req > 1e4:
+            print(f"\tbad estimate: n_req = {n_req:.3e} -> dropping log-fit")
+            fit = False
+            nvals_fit = None
+        else:
+            n_req = int(np.ceil(n_req))
+            print(n_req)
+            nvals_fit = list(range(min(nvals), n_req + 1))
 
     if plot:
         if len(plot) == 2:
@@ -79,7 +87,8 @@ def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None, fit=Tr
         else:
             fig, ax = plt.subplots()
 
-        ax.plot(nvals, power_vals, "o", label="Bootstrapped power")
+        print("\tplotting...")
+        ax.plot(nvals, significance_rates, "o", label="Bootstrapped power")
 
         if fit:
             ax.plot(nvals_fit, fitfunc(nvals_fit), "--", label="Fitted log")
@@ -94,8 +103,8 @@ def analyze_bootstrapped_params(path_load, stat_sign, nm=None, plot=None, fit=Tr
         ax.set_title(f"{nm}\n{p0}")
         ax.grid()
         ax.set_xlabel("Sample size $n$")
-        ax.set_ylabel("Power")
+        ax.set_ylabel("Rate of significance")
         ax.legend()
 
-    return p0, nvals, power_vals
+    return p0, nvals, significance_rates
 

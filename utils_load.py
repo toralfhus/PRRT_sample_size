@@ -24,3 +24,23 @@ def load_pub7(folder):
 
     pass
 
+
+def load_pub9(folder):
+
+    print(f"\n--- Loading tables 2 and 3 from pub9: Jahn et al 2020 ---")
+    files = os.listdir(folder)
+    files = list(filter(lambda f: ".csv" in f and "Pub9" in f, files))
+    files = list(filter(lambda f: "boot" not in f, files))
+    print(files)
+
+
+    if len(files) != 1:
+        print("ERR: multiple files found, only one expected:", files)
+        return 0
+
+    else:
+        f = files[0]
+        df = pd.read_csv(os.path.join(folder, f), index_col=None, encoding='unicode_escape')
+        print("LOADED:", df.shape, df.columns.values)
+        return df
+
