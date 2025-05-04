@@ -50,6 +50,7 @@ for i, dfi in enumerate(dfs):
         compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save=path_save, n_min=3, n_rep=1000, nm=nm)
     analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]), fit=True, desired_power=0.9)
 
-savefig_path = os.path.join(folder_figs, "power_boot.pdf")
+savefig_path = os.path.join(folder_figs, f"{nm}_power_boot.pdf")
 plt.savefig(savefig_path)
 print("SAVED computed type II error rates:", savefig_path)
+

@@ -592,6 +592,9 @@ def load_dose_volume_points(img_path="", plot=False):
 
     if not img_path:
         img_path = "../../PRRT_sample_size/figures/pub1_hebert24/dose_dtv_hebert_2024.png"
+        print(os.path.exists(img_path))
+        sys.exit()
+
 
     # Pixel -> dose, volume-change convertion functions
     px_to_xval = np.array([[0, 70], [50, 205], [100, 340], [150, 474], [200, 609]])         # total tumor absorbed dose, x-pixel value

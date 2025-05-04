@@ -2,7 +2,7 @@ from utils_load import *
 from utils_mc import *
 from scipy.stats import linregress
 
-pub_name = "pub5_ha24"
+pub_name = "pub6_delprete17"
 folder_data = os.path.join(os.getcwd(), "data", pub_name)
 folder_figs = os.path.join(os.getcwd(), "figures", pub_name)
 os.makedirs(folder_figs, exist_ok=True)
@@ -54,8 +54,10 @@ if replicate_original:
     print("SAVED replications", savefig_path)
 
 
-dfs = load_pub5(folder_data)
-fig, ax = plt.subplots(ncols=3, nrows=2, figsize=(18, 12))
+dfs = load_pub6(folder_data)
+
+
+fig, ax = plt.subplots(ncols=2, figsize=(10, 6))
 ax = ax.ravel()
 
 # Iterate over the figures
@@ -65,11 +67,15 @@ for i, dfi in enumerate(dfs):
     path_save = os.path.join(folder_data, f"boot_{nm}.csv")
 
     if do_calc:
-        compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save=path_save, n_min=3, n_rep=1000, nm=nm)
-    analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]), fit=True, desired_power=0.9)
+        compute_bootstrapped_params(x_orig, y_orig, stat_names, stat_func, path_save=path_save, n_min=n_min, n_rep=n_rep, nm=nm)
+
+    if nm == "Pub6B_DelPrete_Fig3":
+        analyze_bootsrapped_negative_results(path_save, nm=nm, plot=(fig, ax[i]), desired_power=desired_power)
+    else:
+        analyze_bootstrapped_params(path_save, stat_sign, nm=nm, plot=(fig, ax[i]), fit=True, desired_power=desired_power)
 
 fig.tight_layout(h_pad=5)
-savefig_path = os.path.join(folder_figs, f"{nm}_power_boot.pdf")
+savefig_path = os.path.join(folder_figs, f"{pub_name}_power_boot.pdf")
 plt.savefig(savefig_path)
 print("SAVED computed type II error rates:", savefig_path)
 
